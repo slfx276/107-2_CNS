@@ -1,0 +1,52 @@
+--- firstProject.cpp	2019-06-20 13:03:45.338440700 +0800
++++ firstProject_patch.cpp	2019-06-22 17:39:40.673951500 +0800
+@@ -99,7 +99,7 @@
+         setage(uage);
+         project = new char[strlen(uproject)];
+         memcpy(project, uproject, strlen(uproject));
+-        usalary = salary;
++        salary = usalary; // bug e.
+     }
+     ~PM()
+     {
+@@ -126,7 +126,11 @@
+     {
+         setname();
+         cout << "Project :";
+-        cin >> project;
++        char *temp; // bug b.
++        scanf("%63s" , temp);
++        if(strlen(temp) > strlen(project))
++            exit(-1);
++        strcpy(project , temp);
+         cout << "Done !" << endl;
+     }
+ };
+@@ -265,14 +269,14 @@
+                 cin >> age;
+ 
+                 cout << "Project :";
+-                scanf("%64s", project);
++                scanf("%63s", project); // bug c.
+                 cout << "Salary :";
+                 cin >> salary;
+                 cout << "Done !" << endl;
+-                *pm_count++;
++                (*pm_count)++; // bug d.
+                 pm_array[idx] = new PM(name, age, project, salary);
+-                tmpname = new char[strlen(name.c_str())];
+-                memcpy(tmpname, name.c_str(), strlen(name.c_str()));
++                tmpname = new char[strlen(name.c_str()) + 1]; // bug f.
++                memcpy(tmpname, name.c_str(), strlen(name.c_str()) + 1);
+                 allperson[count] = tmpname;
+                 count++;
+             }
+@@ -386,7 +390,7 @@
+     string name;
+     unsigned int age = 0;
+     unsigned int salary = 0;
+-    int idx = 0;
++    unsigned int idx = 0; // bug a.
+     job_menu();
+     switch (read_long())
+     {
